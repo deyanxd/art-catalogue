@@ -12,234 +12,177 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #1a1a1a;
             color: #e0e0e0;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
         }
 
         .container {
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        /* Left Sidebar */
+        /* Sidebar */
         .sidebar {
-            width: 320px;
-            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
-            padding: 24px;
+            width: 300px;
+            background: #242424;
+            padding: 20px;
             overflow-y: auto;
-            border-right: 1px solid #2a2a2a;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+            border-right: 1px solid #333;
         }
 
-        .sidebar h2 {
+        .sidebar h1 {
             font-size: 24px;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
+            margin-bottom: 30px;
+            color: #667eea;
         }
 
-        .filter-section {
-            margin-bottom: 28px;
+        .section {
+            margin-bottom: 25px;
         }
 
-        .filter-section h3 {
-            font-size: 14px;
+        .section h3 {
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #888;
-            font-weight: 600;
         }
 
-        .search-input {
+        input[type="text"], input[type="file"], select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px;
             background: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 8px;
+            border: 1px solid #444;
+            border-radius: 5px;
             color: #e0e0e0;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            margin-bottom: 10px;
         }
 
-        .search-input:focus {
+        input[type="text"]:focus, select:focus {
             outline: none;
             border-color: #667eea;
-            background: #222;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .tag-input-container {
-            position: relative;
-            margin-bottom: 12px;
-        }
-
-        .tag-list {
+        .tag-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 5px;
+            margin-top: 10px;
         }
 
         .tag {
-            padding: 6px 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
+            padding: 5px 10px;
+            background: #667eea;
+            border-radius: 15px;
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .tag::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .tag:hover::before {
-            opacity: 1;
+        .tag:hover {
+            background: #5a6fd8;
         }
 
         .tag.active {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            transform: scale(1.05);
+            background: #9333ea;
         }
 
-        .tag-remove {
-            margin-left: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .color-picker-container {
+        .color-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
-        .color-option {
-            width: 100%;
+        .color-box {
             aspect-ratio: 1;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid transparent;
-            position: relative;
-            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s;
         }
 
-        .color-option::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .color-option:hover {
+        .color-box:hover {
             transform: scale(1.1);
         }
 
-        .color-option:hover::after {
-            opacity: 1;
-        }
-
-        .color-option.active {
+        .color-box.active {
             border-color: #fff;
-            transform: scale(1.15);
-            box-shadow: 0 0 20px currentColor;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
 
-        .items-per-page {
+        .count-buttons {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 10px;
         }
 
-        .items-per-page button {
+        .count-btn {
             flex: 1;
             padding: 8px;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 6px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 5px;
             color: #e0e0e0;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
         }
 
-        .items-per-page button:hover {
-            background: #222;
+        .count-btn:hover {
+            background: #333;
+        }
+
+        .count-btn.active {
+            background: #667eea;
             border-color: #667eea;
         }
 
-        .items-per-page button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: transparent;
+        .upload-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #444;
         }
 
-        /* Upload Section */
-        .upload-btn {
+        .btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px;
+            background: #667eea;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             color: white;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
-        .upload-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+        .btn:hover {
+            background: #5a6fd8;
         }
 
-        .upload-btn:hover::before {
-            width: 300px;
-            height: 300px;
+        .btn-danger {
+            background: #dc2626;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
         }
 
         /* Gallery */
         .gallery-container {
             flex: 1;
-            padding: 24px;
+            padding: 20px;
             overflow-y: auto;
-            background: #0a0a0a;
         }
 
         .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-header h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
         }
 
         .gallery-info {
@@ -249,59 +192,49 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 16px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
         }
 
         .gallery-item {
-            aspect-ratio: 1;
-            background: #1a1a1a;
+            background: #242424;
             border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s;
             position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .gallery-item:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
         }
 
         .gallery-item img {
             width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
+            display: block;
         }
 
         .gallery-item-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 8px;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
-            color: white;
-            font-size: 11px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            padding: 10px;
+            font-size: 12px;
         }
 
-        .gallery-item:hover .gallery-item-info {
-            opacity: 1;
+        .gallery-item-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .gallery-item-author {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #666;
         }
 
         /* Modal */
@@ -310,275 +243,141 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
             z-index: 1000;
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            justify-content: center;
+            align-items: center;
         }
 
         .modal.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .modal-content {
             position: relative;
             max-width: 90%;
             max-height: 90%;
-            animation: modalSlideIn 0.3s ease;
         }
 
-        @keyframes modalSlideIn {
-            from {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .modal-image {
+        .modal img {
             max-width: 100%;
             max-height: 90vh;
-            border-radius: 8px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            object-fit: contain;
         }
 
         .modal-close {
             position: absolute;
             top: -40px;
             right: 0;
-            width: 36px;
-            height: 36px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
             color: white;
-            font-size: 20px;
+            font-size: 30px;
             cursor: pointer;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
         }
 
         .modal-close:hover {
             background: rgba(255,255,255,0.2);
-            transform: rotate(90deg);
         }
 
-        /* Upload Modal */
-        .upload-modal {
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 32px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 24px 48px rgba(0,0,0,0.5);
-        }
-
-        .upload-modal h3 {
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .upload-form-group {
-            margin-bottom: 20px;
-        }
-
-        .upload-form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #888;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .upload-form-group input,
-        .upload-form-group select {
-            width: 100%;
+        .status-message {
             padding: 10px;
-            background: #0a0a0a;
-            border: 2px solid #333;
-            border-radius: 6px;
-            color: #e0e0e0;
-            transition: all 0.3s ease;
-        }
-
-        .upload-form-group input:focus,
-        .upload-form-group select:focus {
-            outline: none;
-            border-color: #667eea;
-            background: #111;
-        }
-
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-
-        .file-input-label {
-            display: block;
-            padding: 12px;
-            background: #222;
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-input-label:hover {
-            background: #2a2a2a;
-            border-color: #764ba2;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        .form-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #333;
-            color: #e0e0e0;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary:hover {
-            background: #444;
-        }
-
-        /* GitHub Integration Notice */
-        .github-notice {
-            margin-top: 12px;
-            padding: 10px;
-            background: rgba(102, 126, 234, 0.1);
-            border-left: 3px solid #667eea;
-            border-radius: 4px;
+            margin: 10px 0;
+            border-radius: 5px;
             font-size: 12px;
-            color: #aaa;
+            display: none;
         }
 
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .status-message.success {
+            background: #065f46;
+            color: #10b981;
+            display: block;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #444;
+        .status-message.error {
+            background: #7f1d1d;
+            color: #f87171;
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Left Sidebar -->
+        <!-- Sidebar -->
         <div class="sidebar">
-            <h2>Art Catalogue</h2>
+            <h1>🎨 Art Catalogue</h1>
             
             <!-- Search -->
-            <div class="filter-section">
+            <div class="section">
                 <h3>Search</h3>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search artworks...">
+                <input type="text" id="searchInput" placeholder="Search artworks...">
             </div>
 
-            <!-- Tags -->
-            <div class="filter-section">
-                <h3>Tags</h3>
-                <div class="tag-input-container">
-                    <input type="text" class="search-input" id="tagInput" placeholder="Add tag and press Enter...">
-                </div>
-                <div class="tag-list" id="activeTags"></div>
+            <!-- Tags Filter -->
+            <div class="section">
+                <h3>Filter by Tags</h3>
+                <input type="text" id="tagInput" placeholder="Type tag and press Enter...">
+                <div class="tag-container" id="activeTags"></div>
             </div>
 
             <!-- Author Filter -->
-            <div class="filter-section">
-                <h3>Author</h3>
-                <input type="text" class="search-input" id="authorFilter" placeholder="Filter by author...">
+            <div class="section">
+                <h3>Filter by Author</h3>
+                <input type="text" id="authorInput" placeholder="Author name...">
             </div>
 
-            <!-- Color Scheme Filter -->
-            <div class="filter-section">
-                <h3>Color Scheme</h3>
-                <div class="color-picker-container" id="colorPicker">
-                    <div class="color-option" data-color="red" style="background: linear-gradient(135deg, #ff6b6b, #c92a2a);"></div>
-                    <div class="color-option" data-color="blue" style="background: linear-gradient(135deg, #4dabf7, #1864ab);"></div>
-                    <div class="color-option" data-color="green" style="background: linear-gradient(135deg, #51cf66, #2b8a3e);"></div>
-                    <div class="color-option" data-color="yellow" style="background: linear-gradient(135deg, #ffd43b, #f08c00);"></div>
-                    <div class="color-option" data-color="purple" style="background: linear-gradient(135deg, #b197fc, #7048e8);"></div>
-                    <div class="color-option" data-color="pink" style="background: linear-gradient(135deg, #ff8cc3, #e64980);"></div>
-                    <div class="color-option" data-color="monochrome" style="background: linear-gradient(135deg, #dee2e6, #212529);"></div>
+            <!-- Color Filter -->
+            <div class="section">
+                <h3>Filter by Color</h3>
+                <div class="color-grid">
+                    <div class="color-box" data-color="red" style="background: #ef4444;"></div>
+                    <div class="color-box" data-color="blue" style="background: #3b82f6;"></div>
+                    <div class="color-box" data-color="green" style="background: #10b981;"></div>
+                    <div class="color-box" data-color="yellow" style="background: #f59e0b;"></div>
+                    <div class="color-box" data-color="purple" style="background: #8b5cf6;"></div>
+                    <div class="color-box" data-color="pink" style="background: #ec4899;"></div>
+                    <div class="color-box" data-color="mono" style="background: #6b7280;"></div>
+                    <div class="color-box" data-color="all" style="background: linear-gradient(45deg, #ef4444, #3b82f6, #10b981, #f59e0b);"></div>
                 </div>
             </div>
 
-            <!-- Items Per Page -->
-            <div class="filter-section">
-                <h3>Items Per Page</h3>
-                <div class="items-per-page">
-                    <button data-count="10">10</button>
-                    <button data-count="20" class="active">20</button>
-                    <button data-count="50">50</button>
+            <!-- Items per page -->
+            <div class="section">
+                <h3>Items per Page</h3>
+                <div class="count-buttons">
+                    <button class="count-btn" data-count="10">10</button>
+                    <button class="count-btn active" data-count="20">20</button>
+                    <button class="count-btn" data-count="50">50</button>
                 </div>
             </div>
 
-            <!-- Upload Button -->
-            <button class="upload-btn" id="uploadBtn">Upload New Artwork</button>
-
-            <!-- GitHub Notice -->
-            <div class="github-notice">
-                Note: To enable GitHub storage, configure your repository settings in the upload dialog.
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <h3>Add New Artwork</h3>
+                <input type="file" id="fileInput" accept="image/*">
+                <input type="text" id="titleInput" placeholder="Title">
+                <input type="text" id="authorNameInput" placeholder="Author">
+                <input type="text" id="tagsInput" placeholder="Tags (comma-separated)">
+                <select id="colorSelect">
+                    <option value="">Select color scheme...</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                    <option value="pink">Pink</option>
+                    <option value="mono">Monochrome</option>
+                </select>
+                <button class="btn" onclick="uploadArtwork()">Upload Artwork</button>
+                <div id="statusMessage" class="status-message"></div>
+                <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
             </div>
         </div>
 
@@ -586,88 +385,24 @@
         <div class="gallery-container">
             <div class="gallery-header">
                 <h2>Gallery</h2>
-                <div class="gallery-info">
-                    <span id="itemCount">0 items</span>
-                </div>
+                <div class="gallery-info" id="galleryInfo">0 artworks</div>
             </div>
             <div class="gallery" id="gallery"></div>
         </div>
     </div>
 
-    <!-- Image View Modal -->
-    <div class="modal" id="imageModal">
+    <!-- Image Modal -->
+    <div class="modal" id="modal">
         <div class="modal-content">
-            <button class="modal-close" id="closeModal">×</button>
-            <img class="modal-image" id="modalImage" src="" alt="">
-        </div>
-    </div>
-
-    <!-- Upload Modal -->
-    <div class="modal" id="uploadModal">
-        <div class="upload-modal">
-            <h3>Upload New Artwork</h3>
-            <form id="uploadForm">
-                <div class="upload-form-group">
-                    <label for="imageFile">Select Image</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="imageFile" accept="image/*" required>
-                        <label for="imageFile" class="file-input-label">
-                            <span id="fileName">Choose file or drag here...</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="upload-form-group">
-                    <label for="imageTitle">Title</label>
-                    <input type="text" id="imageTitle" placeholder="Artwork title..." required>
-                </div>
-                
-                <div class="upload-form-group">
-                    <label for="imageAuthor">Author</label>
-                    <input type="text" id="imageAuthor" placeholder="Artist name..." required>
-                </div>
-                
-                <div class="upload-form-group">
-                    <label for="imageTags">Tags (comma-separated)</label>
-                    <input type="text" id="imageTags" placeholder="portrait, oil painting, renaissance...">
-                </div>
-                
-                <div class="upload-form-group">
-                    <label for="imageColor">Primary Color Scheme</label>
-                    <select id="imageColor">
-                        <option value="">Select color...</option>
-                        <option value="red">Red</option>
-                        <option value="blue">Blue</option>
-                        <option value="green">Green</option>
-                        <option value="yellow">Yellow</option>
-                        <option value="purple">Purple</option>
-                        <option value="pink">Pink</option>
-                        <option value="monochrome">Monochrome</option>
-                    </select>
-                </div>
-
-                <div class="upload-form-group">
-                    <label for="githubRepo">GitHub Repository (optional)</label>
-                    <input type="text" id="githubRepo" placeholder="username/repository">
-                </div>
-
-                <div class="upload-form-group">
-                    <label for="githubToken">GitHub Token (optional)</label>
-                    <input type="password" id="githubToken" placeholder="Your GitHub personal access token">
-                </div>
-                
-                <div class="form-buttons">
-                    <button type="submit" class="btn-primary">Upload</button>
-                    <button type="button" class="btn-secondary" id="cancelUpload">Cancel</button>
-                </div>
-            </form>
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="">
         </div>
     </div>
 
     <script>
-        // Application State
-        let artworks = JSON.parse(localStorage.getItem('artCatalogue') || '[]');
-        let filteredArtworks = [...artworks];
+        // Data management
+        let artworks = [];
+        let filteredArtworks = [];
         let currentFilters = {
             search: '',
             tags: [],
@@ -676,169 +411,159 @@
             itemsPerPage: 20
         };
 
-        // DOM Elements
-        const gallery = document.getElementById('gallery');
-        const searchInput = document.getElementById('searchInput');
-        const tagInput = document.getElementById('tagInput');
-        const activeTags = document.getElementById('activeTags');
-        const authorFilter = document.getElementById('authorFilter');
-        const colorPicker = document.getElementById('colorPicker');
-        const itemCount = document.getElementById('itemCount');
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.getElementById('closeModal');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const uploadModal = document.getElementById('uploadModal');
-        const uploadForm = document.getElementById('uploadForm');
-        const cancelUpload = document.getElementById('cancelUpload');
-        const imageFile = document.getElementById('imageFile');
-        const fileName = document.getElementById('fileName');
-
         // Initialize
         function init() {
-            renderGallery();
+            loadArtworks();
             setupEventListeners();
+            renderGallery();
         }
 
-        // Event Listeners
+        // Load artworks from localStorage
+        function loadArtworks() {
+            const stored = localStorage.getItem('artCatalogue');
+            if (stored) {
+                try {
+                    artworks = JSON.parse(stored);
+                    filteredArtworks = [...artworks];
+                } catch (e) {
+                    console.error('Error loading artworks:', e);
+                    artworks = [];
+                    filteredArtworks = [];
+                }
+            }
+        }
+
+        // Save artworks to localStorage
+        function saveArtworks() {
+            try {
+                localStorage.setItem('artCatalogue', JSON.stringify(artworks));
+                return true;
+            } catch (e) {
+                console.error('Error saving:', e);
+                showStatus('Storage error - image might be too large', 'error');
+                return false;
+            }
+        }
+
+        // Setup event listeners
         function setupEventListeners() {
             // Search
-            searchInput.addEventListener('input', (e) => {
+            document.getElementById('searchInput').addEventListener('input', (e) => {
                 currentFilters.search = e.target.value.toLowerCase();
                 applyFilters();
             });
 
-            // Tags
-            tagInput.addEventListener('keypress', (e) => {
+            // Tag input
+            document.getElementById('tagInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' && e.target.value.trim()) {
-                    addTag(e.target.value.trim());
+                    addFilterTag(e.target.value.trim());
                     e.target.value = '';
                 }
             });
 
-            // Author
-            authorFilter.addEventListener('input', (e) => {
+            // Author filter
+            document.getElementById('authorInput').addEventListener('input', (e) => {
                 currentFilters.author = e.target.value.toLowerCase();
                 applyFilters();
             });
 
-            // Color picker
-            colorPicker.querySelectorAll('.color-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    colorPicker.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
-                    if (currentFilters.color === option.dataset.color) {
+            // Color filters
+            document.querySelectorAll('.color-box').forEach(box => {
+                box.addEventListener('click', () => {
+                    // Clear other selections
+                    document.querySelectorAll('.color-box').forEach(b => b.classList.remove('active'));
+                    
+                    if (currentFilters.color === box.dataset.color) {
                         currentFilters.color = '';
                     } else {
-                        option.classList.add('active');
-                        currentFilters.color = option.dataset.color;
+                        box.classList.add('active');
+                        currentFilters.color = box.dataset.color;
                     }
+                    
+                    if (box.dataset.color === 'all') {
+                        currentFilters.color = '';
+                    }
+                    
                     applyFilters();
                 });
             });
 
             // Items per page
-            document.querySelectorAll('.items-per-page button').forEach(btn => {
+            document.querySelectorAll('.count-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.items-per-page button').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentFilters.itemsPerPage = parseInt(btn.dataset.count);
                     renderGallery();
                 });
             });
 
-            // Modal controls
-            closeModal.addEventListener('click', () => {
-                imageModal.classList.remove('active');
-            });
-
-            imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) {
-                    imageModal.classList.remove('active');
+            // Close modal on click outside
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target.id === 'modal') {
+                    closeModal();
                 }
             });
-
-            // Upload controls
-            uploadBtn.addEventListener('click', () => {
-                uploadModal.classList.add('active');
-            });
-
-            cancelUpload.addEventListener('click', () => {
-                uploadModal.classList.remove('active');
-                uploadForm.reset();
-                fileName.textContent = 'Choose file or drag here...';
-            });
-
-            uploadModal.addEventListener('click', (e) => {
-                if (e.target === uploadModal) {
-                    uploadModal.classList.remove('active');
-                    uploadForm.reset();
-                    fileName.textContent = 'Choose file or drag here...';
-                }
-            });
-
-            // File input
-            imageFile.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    fileName.textContent = e.target.files[0].name;
-                }
-            });
-
-            // Upload form
-            uploadForm.addEventListener('submit', handleUpload);
 
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
-                    imageModal.classList.remove('active');
-                    uploadModal.classList.remove('active');
+                    closeModal();
                 }
             });
         }
 
-        // Tag Management
-        function addTag(tag) {
+        // Add filter tag
+        function addFilterTag(tag) {
             if (!currentFilters.tags.includes(tag)) {
                 currentFilters.tags.push(tag);
-                renderActiveTags();
+                renderFilterTags();
                 applyFilters();
             }
         }
 
-        function removeTag(tag) {
+        // Remove filter tag
+        function removeFilterTag(tag) {
             currentFilters.tags = currentFilters.tags.filter(t => t !== tag);
-            renderActiveTags();
+            renderFilterTags();
             applyFilters();
         }
 
-        function renderActiveTags() {
-            activeTags.innerHTML = currentFilters.tags.map(tag => `
-                <span class="tag active">
-                    ${tag}
-                    <span class="tag-remove" onclick="removeTag('${tag}')">×</span>
-                </span>
-            `).join('');
+        // Render filter tags
+        function renderFilterTags() {
+            const container = document.getElementById('activeTags');
+            container.innerHTML = currentFilters.tags.map(tag => 
+                `<span class="tag active" onclick="removeFilterTag('${tag}')">${tag} ×</span>`
+            ).join('');
         }
 
-        // Filtering
+        // Apply filters
         function applyFilters() {
             filteredArtworks = artworks.filter(artwork => {
                 // Search filter
-                if (currentFilters.search && 
-                    !artwork.title.toLowerCase().includes(currentFilters.search) &&
-                    !artwork.tags.some(tag => tag.toLowerCase().includes(currentFilters.search))) {
-                    return false;
+                if (currentFilters.search) {
+                    const searchTerm = currentFilters.search;
+                    const matchesSearch = 
+                        artwork.title.toLowerCase().includes(searchTerm) ||
+                        artwork.author.toLowerCase().includes(searchTerm) ||
+                        artwork.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                    
+                    if (!matchesSearch) return false;
                 }
 
                 // Tag filter
-                if (currentFilters.tags.length > 0 &&
-                    !currentFilters.tags.every(tag => artwork.tags.includes(tag))) {
-                    return false;
+                if (currentFilters.tags.length > 0) {
+                    const hasAllTags = currentFilters.tags.every(tag => 
+                        artwork.tags.some(artTag => artTag.toLowerCase() === tag.toLowerCase())
+                    );
+                    if (!hasAllTags) return false;
                 }
 
                 // Author filter
-                if (currentFilters.author &&
-                    !artwork.author.toLowerCase().includes(currentFilters.author)) {
-                    return false;
+                if (currentFilters.author) {
+                    if (!artwork.author.toLowerCase().includes(currentFilters.author)) {
+                        return false;
+                    }
                 }
 
                 // Color filter
@@ -852,134 +577,134 @@
             renderGallery();
         }
 
-        // Gallery Rendering
+        // Render gallery
         function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            const galleryInfo = document.getElementById('galleryInfo');
+            
             const itemsToShow = filteredArtworks.slice(0, currentFilters.itemsPerPage);
             
-            if (itemsToShow.length === 0) {
-                gallery.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">
-                        No artworks found. Upload your first artwork to get started!
-                    </div>
-                `;
-            } else {
-                gallery.innerHTML = itemsToShow.map((artwork, index) => `
-                    <div class="gallery-item" onclick="openImage('${artwork.url}')">
-                        <img src="${artwork.url}" alt="${artwork.title}" loading="lazy">
-                        <div class="gallery-item-info">
-                            <div>${artwork.title}</div>
-                            <div style="opacity: 0.7; font-size: 10px;">${artwork.author}</div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            itemCount.textContent = `${filteredArtworks.length} item${filteredArtworks.length !== 1 ? 's' : ''}`;
-        }
-
-        // Image Modal
-        function openImage(url) {
-            modalImage.src = url;
-            imageModal.classList.add('active');
-        }
-
-        // Upload Handler
-        async function handleUpload(e) {
-            e.preventDefault();
+            galleryInfo.textContent = `${filteredArtworks.length} artwork${filteredArtworks.length !== 1 ? 's' : ''}`;
             
-            const file = imageFile.files[0];
-            if (!file) return;
+            if (itemsToShow.length === 0) {
+                gallery.innerHTML = '<div class="empty-state">No artworks found. Upload your first artwork to get started!</div>';
+                return;
+            }
+            
+            gallery.innerHTML = itemsToShow.map(artwork => `
+                <div class="gallery-item" onclick="openModal('${artwork.id}')">
+                    <img src="${artwork.thumbnail || artwork.url}" alt="${artwork.title}">
+                    <div class="gallery-item-info">
+                        <div class="gallery-item-title">${artwork.title}</div>
+                        <div class="gallery-item-author">${artwork.author}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-            // Read file as data URL
+        // Upload artwork
+        async function uploadArtwork() {
+            const fileInput = document.getElementById('fileInput');
+            const titleInput = document.getElementById('titleInput');
+            const authorInput = document.getElementById('authorNameInput');
+            const tagsInput = document.getElementById('tagsInput');
+            const colorSelect = document.getElementById('colorSelect');
+            
+            if (!fileInput.files[0]) {
+                showStatus('Please select an image', 'error');
+                return;
+            }
+            
+            if (!titleInput.value.trim()) {
+                showStatus('Please enter a title', 'error');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            
+            // Check file size (limit to 5MB for localStorage)
+            if (file.size > 5 * 1024 * 1024) {
+                showStatus('Image too large. Please use images under 5MB.', 'error');
+                return;
+            }
+            
+            // Read file
             const reader = new FileReader();
-            reader.onload = async function(event) {
-                const imageData = event.target.result;
-                
-                // Create artwork object
+            reader.onload = function(e) {
                 const artwork = {
-                    id: Date.now(),
-                    title: document.getElementById('imageTitle').value,
-                    author: document.getElementById('imageAuthor').value,
-                    tags: document.getElementById('imageTags').value
-                        .split(',')
-                        .map(tag => tag.trim())
-                        .filter(tag => tag),
-                    color: document.getElementById('imageColor').value,
-                    url: imageData,
-                    uploadDate: new Date().toISOString()
+                    id: Date.now().toString(),
+                    title: titleInput.value.trim(),
+                    author: authorInput.value.trim() || 'Unknown',
+                    tags: tagsInput.value.split(',').map(t => t.trim()).filter(t => t),
+                    color: colorSelect.value,
+                    url: e.target.result,
+                    thumbnail: e.target.result, // In a real app, you'd create a smaller version
+                    dateAdded: new Date().toISOString()
                 };
-
-                // GitHub integration (if configured)
-                const githubRepo = document.getElementById('githubRepo').value;
-                const githubToken = document.getElementById('githubToken').value;
-
-                if (githubRepo && githubToken) {
-                    try {
-                        await uploadToGitHub(file, artwork, githubRepo, githubToken);
-                    } catch (error) {
-                        console.error('GitHub upload failed:', error);
-                        alert('GitHub upload failed. Image saved locally.');
-                    }
-                }
-
-                // Add to collection
+                
                 artworks.unshift(artwork);
-                localStorage.setItem('artCatalogue', JSON.stringify(artworks));
                 
-                // Reset and update
-                uploadModal.classList.remove('active');
-                uploadForm.reset();
-                fileName.textContent = 'Choose file or drag here...';
-                
-                // Refresh gallery
-                filteredArtworks = [...artworks];
-                applyFilters();
+                if (saveArtworks()) {
+                    // Clear inputs
+                    fileInput.value = '';
+                    titleInput.value = '';
+                    authorInput.value = '';
+                    tagsInput.value = '';
+                    colorSelect.value = '';
+                    
+                    showStatus('Artwork uploaded successfully!', 'success');
+                    
+                    // Refresh gallery
+                    filteredArtworks = [...artworks];
+                    applyFilters();
+                }
             };
-
+            
+            reader.onerror = function() {
+                showStatus('Error reading file', 'error');
+            };
+            
             reader.readAsDataURL(file);
         }
 
-        // GitHub Upload (requires proper authentication)
-        async function uploadToGitHub(file, artwork, repo, token) {
-            const [owner, repoName] = repo.split('/');
-            const fileName = `artworks/${artwork.id}_${file.name}`;
-            
-            // Convert file to base64
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = async function() {
-                    const base64 = btoa(reader.result);
-                    
-                    try {
-                        const response = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${fileName}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Authorization': `token ${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                message: `Upload artwork: ${artwork.title}`,
-                                content: base64,
-                                branch: 'main'
-                            })
-                        });
-
-                        if (response.ok) {
-                            const data = await response.json();
-                            artwork.githubUrl = data.content.download_url;
-                            console.log('Successfully uploaded to GitHub:', data.content.download_url);
-                            resolve(data);
-                        } else {
-                            throw new Error('GitHub API request failed');
-                        }
-                    } catch (error) {
-                        reject(error);
-                    }
-                };
-                reader.onerror = reject;
-                reader.readAsBinaryString(file);
-            });
+        // Open modal
+        function openModal(id) {
+            const artwork = artworks.find(a => a.id === id);
+            if (artwork) {
+                document.getElementById('modalImage').src = artwork.url;
+                document.getElementById('modal').classList.add('active');
+            }
         }
 
-        // Initialize the application
+        // Close modal
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+            
+            setTimeout(() => {
+                statusEl.className = 'status-message';
+            }, 3000);
+        }
+
+        // Clear all data
+        function clearAll() {
+            if (confirm('Are you sure you want to delete all artworks? This cannot be undone.')) {
+                localStorage.removeItem('artCatalogue');
+                artworks = [];
+                filteredArtworks = [];
+                renderGallery();
+                showStatus('All data cleared', 'success');
+            }
+        }
+
+        // Start the app
         init();
+    </script>
+</body>
+</html>
