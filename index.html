@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Art Catalogue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background: #1a1a1a;
             color: #e0e0e0;
             min-height: 100vh;
@@ -35,7 +36,8 @@
         .sidebar h1 {
             font-size: 24px;
             margin-bottom: 30px;
-            color: #667eea;
+            color: #ffffff;
+            font-weight: 300;
         }
 
         .section {
@@ -55,14 +57,14 @@
             padding: 10px;
             background: #1a1a1a;
             border: 1px solid #444;
-            border-radius: 5px;
+            border-radius: 0;
             color: #e0e0e0;
             margin-bottom: 10px;
         }
 
         input[type="text"]:focus, select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #FFD700;
         }
 
         .tag-container {
@@ -74,33 +76,135 @@
 
         .tag {
             padding: 5px 10px;
-            background: #667eea;
-            border-radius: 15px;
+            background: #FFD700;
+            border-radius: 0;
             font-size: 12px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            color: #1a1a1a;
         }
 
         .tag:hover {
-            background: #5a6fd8;
+            background: #FFC700;
         }
 
         .tag.active {
-            background: #9333ea;
+            background: #FFD700;
         }
 
-        .color-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        .anatomy-categories {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .anatomy-category-btn {
+            flex: 1;
+            padding: 8px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 0;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .anatomy-category-btn:hover {
+            background: #333;
+        }
+
+        .anatomy-category-btn.active {
+            background: #444;
+            border-color: #FFD700;
+        }
+
+        .anatomy-parts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #222;
+            border-radius: 0;
+        }
+
+        .anatomy-option {
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 400;
+            border: 1px solid transparent;
+            display: inline-block;
+            color: #aaa;
+        }
+
+        .anatomy-option:hover {
+            color: #fff;
+        }
+
+        .anatomy-option.active {
+            border: 1px solid #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+            color: #fff;
+        }
+
+        .style-container {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: 10px;
         }
 
+        .style-option {
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 400;
+            border: 1px solid transparent;
+            display: inline-block;
+        }
+
+        .style-option:hover {
+            opacity: 0.8;
+        }
+
+        .style-option.active {
+            border: 1px solid;
+        }
+
+        .style-option[data-style="baroque"].active {
+            border-color: #E8C5A0;
+        }
+
+        .style-option[data-style="impasto"].active {
+            border-color: #FF8C42;
+        }
+
+        .style-option[data-style="flemish"].active {
+            border-color: #FFD700;
+        }
+
+        .style-option[data-style="renaissance"].active {
+            border-color: #87CEEB;
+        }
+
+        .color-grid {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: space-between;
+        }
+
         .color-box {
-            aspect-ratio: 1;
-            border-radius: 5px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
             transition: all 0.3s;
@@ -111,8 +215,35 @@
         }
 
         .color-box.active {
-            border-color: #fff;
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .items-per-page-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .items-per-page-row h3 {
+            margin-bottom: 0;
+        }
+
+        .items-select {
+            width: 80px;
+            padding: 6px 10px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 0;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .items-select:focus {
+            outline: none;
+            border-color: #FFD700;
         }
 
         .count-buttons {
@@ -148,17 +279,17 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background: #667eea;
+            background: #FFD700;
             border: none;
-            border-radius: 5px;
-            color: white;
+            border-radius: 0;
+            color: #1a1a1a;
             cursor: pointer;
             font-weight: 600;
             margin-bottom: 10px;
         }
 
         .btn:hover {
-            background: #5a6fd8;
+            background: #FFC700;
         }
 
         .btn-danger {
@@ -198,7 +329,7 @@
 
         .gallery-item {
             background: #242424;
-            border-radius: 8px;
+            border-radius: 0;
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.3s;
@@ -216,21 +347,6 @@
             display: block;
         }
 
-        .gallery-item-info {
-            padding: 10px;
-            font-size: 12px;
-        }
-
-        .gallery-item-title {
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .gallery-item-author {
-            color: #888;
-            font-size: 11px;
-        }
-
         .empty-state {
             text-align: center;
             padding: 50px;
@@ -245,32 +361,39 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            cursor: grab;
         }
 
         .modal.active {
             display: flex;
         }
 
+        .modal.dragging {
+            cursor: grabbing;
+        }
+
         .modal-content {
             position: relative;
-            max-width: 90%;
-            max-height: 90%;
+            transform-origin: center center;
+            transition: none;
+            user-select: none;
         }
 
         .modal img {
-            max-width: 100%;
+            max-width: 90vw;
             max-height: 90vh;
             object-fit: contain;
+            pointer-events: none;
         }
 
         .modal-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
+            position: fixed;
+            top: 20px;
+            right: 20px;
             color: white;
             font-size: 30px;
             cursor: pointer;
@@ -279,12 +402,53 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.5);
             border-radius: 50%;
+            z-index: 1001;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .modal-close:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.7);
+        }
+
+        .modal-info {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+            color: white;
+            padding: 20px 30px;
+            z-index: 1001;
+            pointer-events: none;
+        }
+
+        .modal-info h3 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 5px;
+        }
+
+        .modal-info p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 5px;
+        }
+
+        .modal-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .modal-tag {
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .status-message {
@@ -306,55 +470,87 @@
             color: #f87171;
             display: block;
         }
+
+        .btn-secondary {
+            background: #444;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h1>🎨 Art Catalogue</h1>
+            <h1>Art Catalogue</h1>
             
             <!-- Search -->
             <div class="section">
                 <h3>Search</h3>
-                <input type="text" id="searchInput" placeholder="Search artworks...">
+                <input type="text" id="searchInput" placeholder="search artworks...">
             </div>
 
             <!-- Tags Filter -->
             <div class="section">
                 <h3>Filter by Tags</h3>
-                <input type="text" id="tagInput" placeholder="Type tag and press Enter...">
+                <input type="text" id="tagInput" placeholder="type tag and press enter...">
                 <div class="tag-container" id="activeTags"></div>
             </div>
 
             <!-- Author Filter -->
             <div class="section">
                 <h3>Filter by Author</h3>
-                <input type="text" id="authorInput" placeholder="Author name...">
+                <input type="text" id="authorInput" placeholder="author name...">
+            </div>
+
+            <!-- Style Filter -->
+            <div class="section">
+                <h3>Filter by Style</h3>
+                <div class="style-container">
+                    <span class="style-option" data-style="baroque" style="color: #E8C5A0;">baroque</span>
+                    <span class="style-option" data-style="impasto" style="color: #FF8C42;">impasto</span>
+                    <span class="style-option" data-style="flemish" style="color: #FFD700;">flemish</span>
+                    <span class="style-option" data-style="renaissance" style="color: #87CEEB;">renaissance</span>
+                </div>
+            </div>
+
+            <!-- Anatomy Filter -->
+            <div class="section">
+                <h3>Filter by Anatomy</h3>
+                <div class="anatomy-categories">
+                    <button class="anatomy-category-btn" data-category="head">Head</button>
+                    <button class="anatomy-category-btn" data-category="body">Body</button>
+                    <button class="anatomy-category-btn" data-category="limbs">Limbs</button>
+                </div>
+                <div class="anatomy-parts" id="anatomyParts" style="display: none;">
+                    <!-- Parts will be dynamically shown based on category -->
+                </div>
             </div>
 
             <!-- Color Filter -->
             <div class="section">
                 <h3>Filter by Color</h3>
                 <div class="color-grid">
-                    <div class="color-box" data-color="red" style="background: #ef4444;"></div>
-                    <div class="color-box" data-color="blue" style="background: #3b82f6;"></div>
-                    <div class="color-box" data-color="green" style="background: #10b981;"></div>
-                    <div class="color-box" data-color="yellow" style="background: #f59e0b;"></div>
-                    <div class="color-box" data-color="purple" style="background: #8b5cf6;"></div>
-                    <div class="color-box" data-color="pink" style="background: #ec4899;"></div>
-                    <div class="color-box" data-color="mono" style="background: #6b7280;"></div>
-                    <div class="color-box" data-color="all" style="background: linear-gradient(45deg, #ef4444, #3b82f6, #10b981, #f59e0b);"></div>
+                    <div class="color-box" data-color="yellow-ochre" style="background: #C4842C;" title="Yellow Ochre"></div>
+                    <div class="color-box" data-color="red-ochre" style="background: #964B1F;" title="Red Ochre"></div>
+                    <div class="color-box" data-color="warm-gray" style="background: #8B7F77;" title="Warm Gray"></div>
+                    <div class="color-box" data-color="fleshy-beige" style="background: #E8C5A0;" title="Fleshy Beige"></div>
+                    <div class="color-box" data-color="cold-flesh" style="background: #E4C7B7;" title="Cold Flesh"></div>
                 </div>
             </div>
 
             <!-- Items per page -->
             <div class="section">
-                <h3>Items per Page</h3>
-                <div class="count-buttons">
-                    <button class="count-btn" data-count="10">10</button>
-                    <button class="count-btn active" data-count="20">20</button>
-                    <button class="count-btn" data-count="50">50</button>
+                <div class="items-per-page-row">
+                    <h3>Items per Page</h3>
+                    <select id="itemsPerPageSelect" class="items-select">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
                 </div>
             </div>
 
@@ -362,21 +558,35 @@
             <div class="upload-section">
                 <h3>Add New Artwork</h3>
                 <input type="file" id="fileInput" accept="image/*">
-                <input type="text" id="titleInput" placeholder="Title">
-                <input type="text" id="authorNameInput" placeholder="Author">
-                <input type="text" id="tagsInput" placeholder="Tags (comma-separated)">
+                <input type="text" id="titleInput" placeholder="title">
+                <input type="text" id="authorNameInput" placeholder="author">
+                <input type="text" id="tagsInput" placeholder="tags (comma-separated)">
+                <select id="styleSelect">
+                    <option value="">Select style...</option>
+                    <option value="baroque">Baroque</option>
+                    <option value="impasto">Impasto</option>
+                    <option value="flemish">Flemish</option>
+                    <option value="renaissance">Renaissance</option>
+                </select>
+                <input type="text" id="anatomyInput" placeholder="anatomy parts (comma-separated: eye, nose, etc.)">
                 <select id="colorSelect">
                     <option value="">Select color scheme...</option>
-                    <option value="red">Red</option>
-                    <option value="blue">Blue</option>
-                    <option value="green">Green</option>
-                    <option value="yellow">Yellow</option>
-                    <option value="purple">Purple</option>
-                    <option value="pink">Pink</option>
-                    <option value="mono">Monochrome</option>
+                    <option value="yellow-ochre">Yellow Ochre</option>
+                    <option value="red-ochre">Red Ochre</option>
+                    <option value="warm-gray">Warm Gray</option>
+                    <option value="fleshy-beige">Fleshy Beige</option>
+                    <option value="cold-flesh">Cold Flesh</option>
                 </select>
                 <button class="btn" onclick="uploadArtwork()">Upload Artwork</button>
                 <div id="statusMessage" class="status-message"></div>
+                
+                <!-- GitHub Settings -->
+                <h3 style="margin-top: 20px;">GitHub Storage</h3>
+                <input type="text" id="githubRepo" placeholder="github username/repository">
+                <input type="password" id="githubToken" placeholder="github personal access token">
+                <button class="btn" onclick="saveGitHubSettings()">Save GitHub Settings</button>
+                <button class="btn btn-secondary" onclick="syncWithGitHub()" style="background: #444; margin-top: 5px;">Sync with GitHub</button>
+                
                 <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
             </div>
         </div>
@@ -393,13 +603,31 @@
 
     <!-- Image Modal -->
     <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-content" id="modalContent">
             <img id="modalImage" src="" alt="">
+        </div>
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-info" id="modalInfo">
+            <h3 id="modalTitle"></h3>
+            <p id="modalAuthor"></p>
+            <div class="modal-tags" id="modalTags"></div>
         </div>
     </div>
 
     <script>
+        // Anatomy categories data
+        const anatomyCategories = {
+            head: ['eye', 'ear', 'nose', 'mouth', 'hair', 'face', 'jaw', 'forehead', 'cheek', 'lips', 'eyebrow'],
+            body: ['torso', 'chest', 'abdomen', 'back', 'waist', 'hip', 'neck', 'shoulder'],
+            limbs: ['hand', 'foot', 'arm', 'leg', 'finger', 'elbow', 'knee', 'wrist', 'ankle', 'toe']
+        };
+
+        // GitHub configuration
+        let githubConfig = {
+            repo: localStorage.getItem('githubRepo') || '',
+            token: localStorage.getItem('githubToken') || ''
+        };
+
         // Data management
         let artworks = [];
         let filteredArtworks = [];
@@ -408,6 +636,8 @@
             tags: [],
             author: '',
             color: '',
+            styles: [],
+            anatomy: [],
             itemsPerPage: 20
         };
 
@@ -416,6 +646,11 @@
             loadArtworks();
             setupEventListeners();
             renderGallery();
+            
+            // Load GitHub settings if they exist
+            if (githubConfig.repo) {
+                document.getElementById('githubRepo').value = githubConfig.repo;
+            }
         }
 
         // Load artworks from localStorage
@@ -467,6 +702,88 @@
                 applyFilters();
             });
 
+            // Anatomy category buttons
+            document.querySelectorAll('.anatomy-category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const category = btn.dataset.category;
+                    const anatomyParts = document.getElementById('anatomyParts');
+                    
+                    // Toggle active state
+                    const wasActive = btn.classList.contains('active');
+                    
+                    // Clear all category buttons
+                    document.querySelectorAll('.anatomy-category-btn').forEach(b => b.classList.remove('active'));
+                    
+                    if (!wasActive) {
+                        // Show this category
+                        btn.classList.add('active');
+                        
+                        // Display anatomy parts for this category
+                        const parts = anatomyCategories[category];
+                        anatomyParts.innerHTML = parts.map(part => 
+                            `<span class="anatomy-option" data-anatomy="${part}">${part}</span>`
+                        ).join('');
+                        
+                        anatomyParts.style.display = 'flex';
+                        
+                        // Re-attach event listeners to new anatomy options
+                        setupAnatomyListeners();
+                        
+                        // Restore active state for previously selected parts
+                        currentFilters.anatomy.forEach(part => {
+                            const element = anatomyParts.querySelector(`[data-anatomy="${part}"]`);
+                            if (element) {
+                                element.classList.add('active');
+                            }
+                        });
+                    } else {
+                        // Hide anatomy parts
+                        anatomyParts.style.display = 'none';
+                        anatomyParts.innerHTML = '';
+                    }
+                });
+            });
+
+            // Function to setup anatomy option listeners
+            function setupAnatomyListeners() {
+                document.querySelectorAll('.anatomy-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        const anatomy = option.dataset.anatomy;
+                        
+                        if (currentFilters.anatomy.includes(anatomy)) {
+                            // Remove anatomy
+                            currentFilters.anatomy = currentFilters.anatomy.filter(a => a !== anatomy);
+                            option.classList.remove('active');
+                        } else {
+                            // Add anatomy
+                            currentFilters.anatomy.push(anatomy);
+                            option.classList.add('active');
+                        }
+                        
+                        applyFilters();
+                    });
+                });
+            }
+
+            // Style filters
+            document.querySelectorAll('.style-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const style = option.dataset.style;
+                    
+                    if (currentFilters.styles.includes(style)) {
+                        // Remove style
+                        currentFilters.styles = currentFilters.styles.filter(s => s !== style);
+                        option.classList.remove('active');
+                    } else {
+                        // Add style
+                        currentFilters.styles.push(style);
+                        option.classList.add('active');
+                    }
+                    
+                    applyFilters();
+                });
+            });
+
             // Color filters
             document.querySelectorAll('.color-box').forEach(box => {
                 box.addEventListener('click', () => {
@@ -480,30 +797,18 @@
                         currentFilters.color = box.dataset.color;
                     }
                     
-                    if (box.dataset.color === 'all') {
-                        currentFilters.color = '';
-                    }
-                    
                     applyFilters();
                 });
             });
 
             // Items per page
-            document.querySelectorAll('.count-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilters.itemsPerPage = parseInt(btn.dataset.count);
-                    renderGallery();
-                });
+            document.getElementById('itemsPerPageSelect').addEventListener('change', (e) => {
+                currentFilters.itemsPerPage = parseInt(e.target.value);
+                renderGallery();
             });
 
-            // Close modal on click outside
-            document.getElementById('modal').addEventListener('click', (e) => {
-                if (e.target.id === 'modal') {
-                    closeModal();
-                }
-            });
+            // Close modal on click outside (disabled for drag functionality)
+            // Only close on Escape key now
 
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
@@ -566,6 +871,26 @@
                     }
                 }
 
+                // Style filter
+                if (currentFilters.styles.length > 0) {
+                    if (!artwork.style || !currentFilters.styles.includes(artwork.style)) {
+                        return false;
+                    }
+                }
+
+                // Anatomy filter
+                if (currentFilters.anatomy.length > 0) {
+                    if (!artwork.anatomy || artwork.anatomy.length === 0) {
+                        return false;
+                    }
+                    const hasMatchingAnatomy = currentFilters.anatomy.some(part => 
+                        artwork.anatomy.includes(part)
+                    );
+                    if (!hasMatchingAnatomy) {
+                        return false;
+                    }
+                }
+
                 // Color filter
                 if (currentFilters.color && artwork.color !== currentFilters.color) {
                     return false;
@@ -594,10 +919,6 @@
             gallery.innerHTML = itemsToShow.map(artwork => `
                 <div class="gallery-item" onclick="openModal('${artwork.id}')">
                     <img src="${artwork.thumbnail || artwork.url}" alt="${artwork.title}">
-                    <div class="gallery-item-info">
-                        <div class="gallery-item-title">${artwork.title}</div>
-                        <div class="gallery-item-author">${artwork.author}</div>
-                    </div>
                 </div>
             `).join('');
         }
@@ -608,6 +929,8 @@
             const titleInput = document.getElementById('titleInput');
             const authorInput = document.getElementById('authorNameInput');
             const tagsInput = document.getElementById('tagsInput');
+            const styleSelect = document.getElementById('styleSelect');
+            const anatomyInput = document.getElementById('anatomyInput');
             const colorSelect = document.getElementById('colorSelect');
             
             if (!fileInput.files[0]) {
@@ -630,17 +953,41 @@
             
             // Read file
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
+                // Process anatomy input
+                const anatomyParts = anatomyInput.value
+                    .split(',')
+                    .map(a => a.trim().toLowerCase())
+                    .filter(a => a);
+                
                 const artwork = {
                     id: Date.now().toString(),
                     title: titleInput.value.trim(),
                     author: authorInput.value.trim() || 'Unknown',
                     tags: tagsInput.value.split(',').map(t => t.trim()).filter(t => t),
+                    style: styleSelect.value,
+                    anatomy: anatomyParts,
                     color: colorSelect.value,
                     url: e.target.result,
                     thumbnail: e.target.result, // In a real app, you'd create a smaller version
                     dateAdded: new Date().toISOString()
                 };
+                
+                // Try to upload to GitHub if configured
+                if (githubConfig.repo && githubConfig.token) {
+                    try {
+                        showStatus('Uploading to GitHub...', 'success');
+                        const githubUrl = await uploadToGitHub(file, artwork);
+                        if (githubUrl) {
+                            artwork.githubUrl = githubUrl;
+                            artwork.url = githubUrl; // Use GitHub URL instead of base64
+                            artwork.thumbnail = githubUrl;
+                        }
+                    } catch (error) {
+                        console.error('GitHub upload failed:', error);
+                        showStatus('GitHub upload failed, saving locally', 'error');
+                    }
+                }
                 
                 artworks.unshift(artwork);
                 
@@ -650,6 +997,8 @@
                     titleInput.value = '';
                     authorInput.value = '';
                     tagsInput.value = '';
+                    styleSelect.value = '';
+                    anatomyInput.value = '';
                     colorSelect.value = '';
                     
                     showStatus('Artwork uploaded successfully!', 'success');
@@ -667,18 +1016,264 @@
             reader.readAsDataURL(file);
         }
 
+        // Upload to GitHub
+        async function uploadToGitHub(file, artwork) {
+            const [owner, repo] = githubConfig.repo.split('/');
+            const fileName = `images/${artwork.id}_${file.name}`;
+            
+            // Convert file to base64
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async function() {
+                    try {
+                        // Convert to base64
+                        const base64 = btoa(reader.result);
+                        
+                        // Upload to GitHub
+                        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${githubConfig.token}`,
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                message: `Upload: ${artwork.title}`,
+                                content: base64,
+                                branch: 'main'
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            // Return the raw GitHub URL for direct image access
+                            const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${fileName}`;
+                            resolve(rawUrl);
+                        } else {
+                            const error = await response.text();
+                            console.error('GitHub API error:', error);
+                            reject(new Error('GitHub upload failed'));
+                        }
+                    } catch (error) {
+                        console.error('Upload error:', error);
+                        reject(error);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsBinaryString(file);
+            });
+        }
+
+        // Save GitHub settings
+        function saveGitHubSettings() {
+            const repo = document.getElementById('githubRepo').value.trim();
+            const token = document.getElementById('githubToken').value.trim();
+            
+            if (!repo || !token) {
+                showStatus('Please enter both repository and token', 'error');
+                return;
+            }
+            
+            githubConfig.repo = repo;
+            githubConfig.token = token;
+            
+            localStorage.setItem('githubRepo', repo);
+            localStorage.setItem('githubToken', token);
+            
+            showStatus('GitHub settings saved!', 'success');
+        }
+
+        // Sync with GitHub (load catalog.json)
+        async function syncWithGitHub() {
+            if (!githubConfig.repo || !githubConfig.token) {
+                showStatus('Please configure GitHub settings first', 'error');
+                return;
+            }
+            
+            try {
+                showStatus('Syncing with GitHub...', 'success');
+                const [owner, repo] = githubConfig.repo.split('/');
+                
+                // Try to get catalog.json from GitHub
+                const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/catalog.json`, {
+                    headers: {
+                        'Authorization': `token ${githubConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const content = JSON.parse(atob(data.content));
+                    
+                    // Merge with local data
+                    if (content.artworks) {
+                        artworks = content.artworks;
+                        saveArtworks();
+                        filteredArtworks = [...artworks];
+                        applyFilters();
+                        showStatus('Synced with GitHub successfully!', 'success');
+                    }
+                } else {
+                    // Create catalog.json if it doesn't exist
+                    await updateGitHubCatalog();
+                    showStatus('Created new catalog on GitHub', 'success');
+                }
+            } catch (error) {
+                console.error('Sync error:', error);
+                showStatus('Sync failed: ' + error.message, 'error');
+            }
+        }
+
+        // Update catalog.json on GitHub
+        async function updateGitHubCatalog() {
+            const [owner, repo] = githubConfig.repo.split('/');
+            
+            // Get current file (if exists) to get SHA
+            let sha = '';
+            try {
+                const getResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/catalog.json`, {
+                    headers: {
+                        'Authorization': `token ${githubConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (getResponse.ok) {
+                    const data = await getResponse.json();
+                    sha = data.sha;
+                }
+            } catch (e) {
+                // File doesn't exist yet
+            }
+            
+            // Update or create file
+            const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/catalog.json`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${githubConfig.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: 'Update catalog',
+                    content: btoa(JSON.stringify({ artworks: artworks }, null, 2)),
+                    branch: 'main',
+                    ...(sha && { sha })
+                })
+            });
+            
+            return response.ok;
+        }
+
         // Open modal
+        let currentScale = 1;
+        let isDragging = false;
+        let currentX = 0;
+        let currentY = 0;
+        let initialX = 0;
+        let initialY = 0;
+        let xOffset = 0;
+        let yOffset = 0;
+
         function openModal(id) {
             const artwork = artworks.find(a => a.id === id);
             if (artwork) {
+                // Reset zoom and position
+                currentScale = 1;
+                currentX = 0;
+                currentY = 0;
+                xOffset = 0;
+                yOffset = 0;
+                
+                const modalContent = document.getElementById('modalContent');
+                modalContent.style.transform = `translate(0px, 0px) scale(1)`;
+                
                 document.getElementById('modalImage').src = artwork.url;
+                document.getElementById('modalTitle').textContent = artwork.title;
+                document.getElementById('modalAuthor').textContent = `by ${artwork.author}${artwork.style ? ' • ' + artwork.style : ''}`;
+                
+                const tagsContainer = document.getElementById('modalTags');
+                if (artwork.tags && artwork.tags.length > 0) {
+                    tagsContainer.innerHTML = artwork.tags.map(tag => 
+                        `<span class="modal-tag">${tag}</span>`
+                    ).join('');
+                } else {
+                    tagsContainer.innerHTML = '';
+                }
+                
                 document.getElementById('modal').classList.add('active');
+                
+                // Add modal event listeners
+                setupModalInteractions();
             }
+        }
+
+        function setupModalInteractions() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Mouse wheel zoom
+            modal.addEventListener('wheel', handleZoom);
+            
+            // Drag functionality
+            modal.addEventListener('mousedown', startDrag);
+            modal.addEventListener('mousemove', drag);
+            modal.addEventListener('mouseup', endDrag);
+            modal.addEventListener('mouseleave', endDrag);
+        }
+
+        function handleZoom(e) {
+            e.preventDefault();
+            const modalContent = document.getElementById('modalContent');
+            
+            const delta = e.deltaY * -0.001;
+            const newScale = Math.min(Math.max(0.5, currentScale + delta), 5);
+            
+            currentScale = newScale;
+            modalContent.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(${currentScale})`;
+        }
+
+        function startDrag(e) {
+            if (e.target.id === 'modal' || e.target.id === 'modalContent' || e.target.id === 'modalImage') {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                isDragging = true;
+                document.getElementById('modal').classList.add('dragging');
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                
+                const modalContent = document.getElementById('modalContent');
+                modalContent.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+            }
+        }
+
+        function endDrag(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+            document.getElementById('modal').classList.remove('dragging');
         }
 
         // Close modal
         function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            
+            // Remove event listeners
+            modal.removeEventListener('wheel', handleZoom);
+            modal.removeEventListener('mousedown', startDrag);
+            modal.removeEventListener('mousemove', drag);
+            modal.removeEventListener('mouseup', endDrag);
+            modal.removeEventListener('mouseleave', endDrag);
         }
 
         // Show status message
