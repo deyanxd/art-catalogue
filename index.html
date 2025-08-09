@@ -199,6 +199,14 @@
             border-color: #87CEEB;
         }
 
+        .style-option[data-style="gothic"].active {
+            border-color: #9D84CE;
+        }
+
+        .style-option[data-style="sculpture"].active {
+            border-color: #FFFFFF;
+        }
+
         .color-grid {
             display: flex;
             gap: 8px;
@@ -395,6 +403,19 @@
             pointer-events: none;
         }
 
+        .zoom-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: #FFD700;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1002;
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+
         .modal-close {
             position: fixed;
             top: 20px;
@@ -422,23 +443,52 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
             color: white;
             padding: 20px 30px;
             z-index: 1001;
-            pointer-events: none;
+            pointer-events: all;
+        }
+
+        .modal-info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
         .modal-info h3 {
             font-size: 18px;
             font-weight: 400;
-            margin-bottom: 5px;
+            margin: 0;
         }
 
         .modal-info p {
             font-size: 14px;
             color: rgba(255,255,255,0.7);
             margin-bottom: 5px;
+        }
+
+        .bw-toggle {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+            border-radius: 0;
+        }
+
+        .bw-toggle.color-mode {
+            background: linear-gradient(135deg, #ffffff 0%, #000000 100%);
+        }
+
+        .bw-toggle.bw-mode {
+            background: linear-gradient(135deg, #E8C5A0 0%, #4a3c28 100%);
+        }
+
+        .bw-toggle:hover {
+            transform: scale(1.1);
+            border-color: #FFD700;
         }
 
         .modal-tags {
@@ -451,9 +501,71 @@
         .modal-tag {
             padding: 4px 10px;
             background: rgba(255,255,255,0.1);
-            border-radius: 15px;
+            border-radius: 0;
             font-size: 12px;
             border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+
+        .modal-tag:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .edit-btn {
+            padding: 5px 12px;
+            background: #FFD700;
+            color: #1a1a1a;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .edit-btn:hover {
+            background: #FFC700;
+        }
+
+        .modal-image-bw {
+            filter: grayscale(100%);
+        }
+
+        .edit-panel {
+            background: #1a1a1a;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #444;
+        }
+
+        .edit-panel input, .edit-panel select {
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #242424;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+
+        .edit-panel button {
+            padding: 8px 15px;
+            margin-right: 10px;
+            background: #FFD700;
+            color: #1a1a1a;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .edit-panel button:hover {
+            background: #FFC700;
+        }
+
+        .edit-panel .cancel-btn {
+            background: #666;
+        }
+
+        .edit-panel .cancel-btn:hover {
+            background: #777;
         }
 
         .status-message {
@@ -504,10 +616,10 @@
                 <div class="tag-container" id="activeTags"></div>
             </div>
 
-            <!-- Author Filter -->
+            <!-- Artist Filter -->
             <div class="section">
-                <h3>Filter by Author</h3>
-                <input type="text" id="authorInput" placeholder="author name...">
+                <h3>Filter by Artist</h3>
+                <input type="text" id="authorInput" placeholder="artist name...">
             </div>
 
             <!-- Style Filter -->
@@ -518,6 +630,8 @@
                     <span class="style-option" data-style="impasto" style="color: #FF8C42;">impasto</span>
                     <span class="style-option" data-style="flemish" style="color: #FFD700;">flemish</span>
                     <span class="style-option" data-style="renaissance" style="color: #87CEEB;">renaissance</span>
+                    <span class="style-option" data-style="gothic" style="color: #9D84CE;">gothic</span>
+                    <span class="style-option" data-style="sculpture" style="color: #FFFFFF;">sculpture</span>
                 </div>
             </div>
 
@@ -572,6 +686,8 @@
                     <option value="impasto">Impasto</option>
                     <option value="flemish">Flemish</option>
                     <option value="renaissance">Renaissance</option>
+                    <option value="gothic">Gothic</option>
+                    <option value="sculpture">Sculpture</option>
                 </select>
                 <input type="text" id="anatomyInput" placeholder="anatomy parts (comma-separated: eye, nose, etc.)">
                 <select id="colorSelect">
@@ -592,6 +708,13 @@
                 <button class="btn" onclick="saveGitHubSettings()">Save GitHub Settings</button>
                 <button class="btn btn-secondary" onclick="syncWithGitHub()" style="background: #444; margin-top: 5px;">Sync with GitHub</button>
                 
+                <!-- Data Management -->
+                <h3 style="margin-top: 20px;">Data Management</h3>
+                <button class="btn btn-secondary" onclick="exportData()" style="background: #444;">Export Data (JSON)</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="background: #444; margin-top: 5px;">Import Data</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                <button class="btn btn-secondary" onclick="showStats()" style="background: #444; margin-top: 5px;">View Statistics</button>
+                
                 <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
             </div>
         </div>
@@ -608,14 +731,50 @@
 
     <!-- Image Modal -->
     <div class="modal" id="modal">
+        <div class="zoom-indicator" id="zoomIndicator" style="display: none;">100%</div>
         <div class="modal-content" id="modalContent">
             <img id="modalImage" src="" alt="">
         </div>
         <span class="modal-close" onclick="closeModal()">&times;</span>
         <div class="modal-info" id="modalInfo">
-            <h3 id="modalTitle"></h3>
-            <p id="modalAuthor"></p>
-            <div class="modal-tags" id="modalTags"></div>
+            <div id="viewMode">
+                <div class="modal-info-header">
+                    <div class="bw-toggle color-mode" id="bwToggle" onclick="toggleBlackWhite()"></div>
+                    <div>
+                        <h3 id="modalTitle"></h3>
+                        <p id="modalAuthor"></p>
+                    </div>
+                    <button class="edit-btn" onclick="toggleEditMode()">Edit</button>
+                </div>
+                <div class="modal-tags" id="modalTags"></div>
+            </div>
+            <div id="editMode" style="display: none;" class="edit-panel">
+                <input type="text" id="editTitle" placeholder="title">
+                <input type="text" id="editAuthor" placeholder="author">
+                <input type="text" id="editTags" placeholder="tags (comma-separated)">
+                <select id="editStyle">
+                    <option value="">Select style...</option>
+                    <option value="baroque">Baroque</option>
+                    <option value="impasto">Impasto</option>
+                    <option value="flemish">Flemish</option>
+                    <option value="renaissance">Renaissance</option>
+                    <option value="gothic">Gothic</option>
+                    <option value="sculpture">Sculpture</option>
+                </select>
+                <input type="text" id="editAnatomy" placeholder="anatomy (comma-separated)">
+                <select id="editColor">
+                    <option value="">Select color...</option>
+                    <option value="yellow-ochre">Yellow Ochre</option>
+                    <option value="red-ochre">Red Ochre</option>
+                    <option value="warm-gray">Warm Gray</option>
+                    <option value="fleshy-beige">Fleshy Beige</option>
+                    <option value="cold-flesh">Cold Flesh</option>
+                </select>
+                <div style="margin-top: 10px;">
+                    <button onclick="saveEdit()">Save</button>
+                    <button class="cancel-btn" onclick="toggleEditMode()">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -765,8 +924,30 @@
                             option.classList.add('active');
                         }
                         
+                        // Update category button highlighting
+                        updateCategoryHighlights();
+                        
                         applyFilters();
                     });
+                });
+            }
+
+            // Update category button highlights based on selected anatomy
+            function updateCategoryHighlights() {
+                document.querySelectorAll('.anatomy-category-btn').forEach(btn => {
+                    const category = btn.dataset.category;
+                    const categoryParts = anatomyCategories[category];
+                    
+                    // Check if any parts in this category are selected
+                    const hasSelection = categoryParts.some(part => 
+                        currentFilters.anatomy.includes(part)
+                    );
+                    
+                    if (hasSelection && !btn.classList.contains('active')) {
+                        btn.classList.add('has-selection');
+                    } else {
+                        btn.classList.remove('has-selection');
+                    }
                 });
             }
 
@@ -913,8 +1094,9 @@
             const galleryInfo = document.getElementById('galleryInfo');
             
             const itemsToShow = filteredArtworks.slice(0, currentFilters.itemsPerPage);
+            const showingCount = Math.min(filteredArtworks.length, currentFilters.itemsPerPage);
             
-            galleryInfo.textContent = `${filteredArtworks.length} artwork${filteredArtworks.length !== 1 ? 's' : ''}`;
+            galleryInfo.textContent = `showing ${showingCount} out of ${artworks.length} total artworks`;
             
             if (itemsToShow.length === 0) {
                 gallery.innerHTML = '<div class="empty-state">No artworks found. Upload your first artwork to get started!</div>';
@@ -1180,10 +1362,15 @@
         let initialY = 0;
         let xOffset = 0;
         let yOffset = 0;
+        let currentArtworkId = null;
+        let isBlackWhite = false;
 
         function openModal(id) {
             const artwork = artworks.find(a => a.id === id);
             if (artwork) {
+                currentArtworkId = id;
+                isBlackWhite = false;
+                
                 // Reset zoom and position
                 currentScale = 1;
                 currentX = 0;
@@ -1194,7 +1381,11 @@
                 const modalContent = document.getElementById('modalContent');
                 modalContent.style.transform = `translate(0px, 0px) scale(1)`;
                 
-                document.getElementById('modalImage').src = artwork.url;
+                const modalImg = document.getElementById('modalImage');
+                modalImg.src = artwork.url;
+                modalImg.classList.remove('modal-image-bw');
+                
+                document.getElementById('bwToggle').className = 'bw-toggle color-mode';
                 document.getElementById('modalTitle').textContent = artwork.title;
                 document.getElementById('modalAuthor').textContent = `by ${artwork.author}${artwork.style ? ' • ' + artwork.style : ''}`;
                 
@@ -1207,10 +1398,103 @@
                     tagsContainer.innerHTML = '';
                 }
                 
+                // Hide edit mode
+                document.getElementById('editMode').style.display = 'none';
+                document.getElementById('viewMode').style.display = 'block';
+                
                 document.getElementById('modal').classList.add('active');
+                document.getElementById('zoomIndicator').style.display = 'block';
+                document.getElementById('zoomIndicator').textContent = '100%';
                 
                 // Add modal event listeners
                 setupModalInteractions();
+            }
+        }
+
+        function toggleBlackWhite() {
+            const modalImg = document.getElementById('modalImage');
+            const bwToggle = document.getElementById('bwToggle');
+            
+            isBlackWhite = !isBlackWhite;
+            
+            if (isBlackWhite) {
+                modalImg.classList.add('modal-image-bw');
+                bwToggle.className = 'bw-toggle bw-mode';
+            } else {
+                modalImg.classList.remove('modal-image-bw');
+                bwToggle.className = 'bw-toggle color-mode';
+            }
+        }
+
+        function toggleEditMode() {
+            const editMode = document.getElementById('editMode');
+            const viewMode = document.getElementById('viewMode');
+            
+            if (editMode.style.display === 'none') {
+                // Switch to edit mode
+                const artwork = artworks.find(a => a.id === currentArtworkId);
+                if (artwork) {
+                    document.getElementById('editTitle').value = artwork.title;
+                    document.getElementById('editAuthor').value = artwork.author;
+                    document.getElementById('editTags').value = artwork.tags ? artwork.tags.join(', ') : '';
+                    document.getElementById('editStyle').value = artwork.style || '';
+                    document.getElementById('editAnatomy').value = artwork.anatomy ? artwork.anatomy.join(', ') : '';
+                    document.getElementById('editColor').value = artwork.color || '';
+                    
+                    editMode.style.display = 'block';
+                    viewMode.style.display = 'none';
+                }
+            } else {
+                // Switch back to view mode
+                editMode.style.display = 'none';
+                viewMode.style.display = 'block';
+            }
+        }
+
+        function saveEdit() {
+            const artwork = artworks.find(a => a.id === currentArtworkId);
+            if (artwork) {
+                artwork.title = document.getElementById('editTitle').value.trim();
+                artwork.author = document.getElementById('editAuthor').value.trim();
+                artwork.tags = document.getElementById('editTags').value
+                    .split(',')
+                    .map(t => t.trim())
+                    .filter(t => t);
+                artwork.style = document.getElementById('editStyle').value;
+                artwork.anatomy = document.getElementById('editAnatomy').value
+                    .split(',')
+                    .map(a => a.trim().toLowerCase())
+                    .filter(a => a);
+                artwork.color = document.getElementById('editColor').value;
+                
+                // Save to localStorage
+                saveArtworks();
+                
+                // Update GitHub if configured
+                if (githubConfig.repo && githubConfig.token) {
+                    updateGitHubCatalog();
+                }
+                
+                // Update display
+                document.getElementById('modalTitle').textContent = artwork.title;
+                document.getElementById('modalAuthor').textContent = `by ${artwork.author}${artwork.style ? ' • ' + artwork.style : ''}`;
+                
+                const tagsContainer = document.getElementById('modalTags');
+                if (artwork.tags && artwork.tags.length > 0) {
+                    tagsContainer.innerHTML = artwork.tags.map(tag => 
+                        `<span class="modal-tag">${tag}</span>`
+                    ).join('');
+                } else {
+                    tagsContainer.innerHTML = '';
+                }
+                
+                // Switch back to view mode
+                toggleEditMode();
+                
+                // Refresh gallery in case filters are applied
+                applyFilters();
+                
+                showStatus('Artwork updated successfully!', 'success');
             }
         }
 
@@ -1237,6 +1521,10 @@
             
             currentScale = newScale;
             modalContent.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(${currentScale})`;
+            
+            // Update zoom indicator
+            const zoomPercent = Math.round(currentScale * 100);
+            document.getElementById('zoomIndicator').textContent = `${zoomPercent}%`;
         }
 
         function startDrag(e) {
@@ -1272,6 +1560,7 @@
         function closeModal() {
             const modal = document.getElementById('modal');
             modal.classList.remove('active');
+            document.getElementById('zoomIndicator').style.display = 'none';
             
             // Remove event listeners
             modal.removeEventListener('wheel', handleZoom);
