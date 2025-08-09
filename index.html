@@ -158,6 +158,80 @@
             color: #fff;
         }
 
+        .dynamic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .dynamic-tag {
+            padding: 3px 8px;
+            background: #333;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid #444;
+            color: #999;
+            transition: all 0.2s;
+        }
+
+        .dynamic-tag:hover {
+            background: #444;
+            color: #FFD700;
+            border-color: #FFD700;
+        }
+
+        .dynamic-tag-count {
+            margin-left: 4px;
+            opacity: 0.6;
+            font-size: 10px;
+        }
+
+        .stats-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            border: 2px solid #FFD700;
+            padding: 30px;
+            z-index: 2000;
+            max-width: 500px;
+            max-height: 70vh;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .stats-modal.active {
+            display: block;
+        }
+
+        .stats-modal h2 {
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .stats-modal .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .stats-modal .close-stats {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FFD700;
+            color: #1a1a1a;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
         .style-container {
             display: flex;
             flex-wrap: wrap;
@@ -201,10 +275,6 @@
 
         .style-option[data-style="gothic"].active {
             border-color: #9D84CE;
-        }
-
-        .style-option[data-style="sculpture"].active {
-            border-color: #FFFFFF;
         }
 
         .color-grid {
@@ -564,8 +634,13 @@
             background: #666;
         }
 
-        .edit-panel .cancel-btn:hover {
-            background: #777;
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
         }
 
         .status-message {
@@ -622,6 +697,14 @@
                 <input type="text" id="authorInput" placeholder="artist name...">
             </div>
 
+            <!-- Dynamic Tags Section -->
+            <div class="section">
+                <h3>Popular Tags</h3>
+                <div class="dynamic-tags" id="dynamicTags">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+
             <!-- Style Filter -->
             <div class="section">
                 <h3>Filter by Style</h3>
@@ -631,7 +714,6 @@
                     <span class="style-option" data-style="flemish" style="color: #FFD700;">flemish</span>
                     <span class="style-option" data-style="renaissance" style="color: #87CEEB;">renaissance</span>
                     <span class="style-option" data-style="gothic" style="color: #9D84CE;">gothic</span>
-                    <span class="style-option" data-style="sculpture" style="color: #FFFFFF;">sculpture</span>
                 </div>
             </div>
 
@@ -676,7 +758,7 @@
             <!-- Upload Section -->
             <div class="upload-section">
                 <h3>Add New Artwork</h3>
-                <input type="file" id="fileInput" accept="image/*">
+                <input type="text" id="imageUrl" placeholder="image url (paste link to image)">
                 <input type="text" id="titleInput" placeholder="title">
                 <input type="text" id="authorNameInput" placeholder="author">
                 <input type="text" id="tagsInput" placeholder="tags (comma-separated)">
@@ -687,7 +769,6 @@
                     <option value="flemish">Flemish</option>
                     <option value="renaissance">Renaissance</option>
                     <option value="gothic">Gothic</option>
-                    <option value="sculpture">Sculpture</option>
                 </select>
                 <input type="text" id="anatomyInput" placeholder="anatomy parts (comma-separated: eye, nose, etc.)">
                 <select id="colorSelect">
@@ -698,22 +779,18 @@
                     <option value="fleshy-beige">Fleshy Beige</option>
                     <option value="cold-flesh">Cold Flesh</option>
                 </select>
-                <button class="btn" onclick="uploadArtwork()">Upload Artwork</button>
+                <button class="btn" onclick="addArtwork()">Add Artwork</button>
                 <div id="statusMessage" class="status-message"></div>
                 
-                <!-- GitHub Settings -->
-                <h3 style="margin-top: 20px;">GitHub Storage</h3>
-                <input type="text" id="githubRepo" placeholder="github username/repository">
-                <input type="password" id="githubToken" placeholder="github personal access token">
-                <button class="btn" onclick="saveGitHubSettings()">Save GitHub Settings</button>
-                <button class="btn btn-secondary" onclick="syncWithGitHub()" style="background: #444; margin-top: 5px;">Sync with GitHub</button>
+                <!-- Backup & Restore -->
+                <h3 style="margin-top: 20px;">Backup & Restore</h3>
+                <button class="btn" onclick="downloadFullBackup()">Download Full Backup</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('restoreFile').click()" style="background: #444; margin-top: 5px;">Restore from Backup</button>
+                <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreFromBackup(event)">
                 
                 <!-- Data Management -->
                 <h3 style="margin-top: 20px;">Data Management</h3>
-                <button class="btn btn-secondary" onclick="exportData()" style="background: #444;">Export Data (JSON)</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="background: #444; margin-top: 5px;">Import Data</button>
-                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
-                <button class="btn btn-secondary" onclick="showStats()" style="background: #444; margin-top: 5px;">View Statistics</button>
+                <button class="btn btn-secondary" onclick="showStats()" style="background: #444;">View Statistics</button>
                 
                 <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
             </div>
@@ -759,7 +836,6 @@
                     <option value="flemish">Flemish</option>
                     <option value="renaissance">Renaissance</option>
                     <option value="gothic">Gothic</option>
-                    <option value="sculpture">Sculpture</option>
                 </select>
                 <input type="text" id="editAnatomy" placeholder="anatomy (comma-separated)">
                 <select id="editColor">
@@ -773,9 +849,17 @@
                 <div style="margin-top: 10px;">
                     <button onclick="saveEdit()">Save</button>
                     <button class="cancel-btn" onclick="toggleEditMode()">Cancel</button>
+                    <button class="delete-btn" onclick="deleteArtwork()">Delete</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div class="stats-modal" id="statsModal">
+        <button class="close-stats" onclick="closeStats()">×</button>
+        <h2>Collection Statistics</h2>
+        <div id="statsContent"></div>
     </div>
 
     <script>
@@ -810,10 +894,174 @@
             loadArtworks();
             setupEventListeners();
             renderGallery();
+            updateDynamicTags();
             
             // Load GitHub settings if they exist
             if (githubConfig.repo) {
                 document.getElementById('githubRepo').value = githubConfig.repo;
+            }
+        }
+
+        // Update dynamic tags based on existing artworks
+        function updateDynamicTags() {
+            const tagCounts = {};
+            
+            // Count all tags
+            artworks.forEach(artwork => {
+                if (artwork.tags) {
+                    artwork.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+            
+            // Sort by count and get top 20
+            const sortedTags = Object.entries(tagCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 20);
+            
+            // Render dynamic tags
+            const dynamicTagsContainer = document.getElementById('dynamicTags');
+            if (sortedTags.length > 0) {
+                dynamicTagsContainer.innerHTML = sortedTags.map(([tag, count]) => 
+                    `<span class="dynamic-tag" onclick="addFilterTag('${tag}')">${tag}<span class="dynamic-tag-count">(${count})</span></span>`
+                ).join('');
+            } else {
+                dynamicTagsContainer.innerHTML = '<span style="color: #666; font-size: 12px;">No tags yet</span>';
+            }
+        }
+
+        // Export data as JSON
+        function exportData() {
+            const dataToExport = {
+                artworks: artworks,
+                exportDate: new Date().toISOString(),
+                totalCount: artworks.length,
+                version: '1.0'
+            };
+            
+            const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `art-catalogue-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('Data exported successfully!', 'success');
+        }
+
+        // Import data from JSON file
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    
+                    if (imported.artworks && Array.isArray(imported.artworks)) {
+                        const confirmImport = confirm(`This will import ${imported.artworks.length} artworks. Existing artworks will be preserved. Continue?`);
+                        
+                        if (confirmImport) {
+                            // Merge with existing data (avoid duplicates based on ID)
+                            const existingIds = new Set(artworks.map(a => a.id));
+                            const newArtworks = imported.artworks.filter(a => !existingIds.has(a.id));
+                            
+                            artworks = [...artworks, ...newArtworks];
+                            saveArtworks();
+                            filteredArtworks = [...artworks];
+                            applyFilters();
+                            updateDynamicTags();
+                            
+                            showStatus(`Imported ${newArtworks.length} new artworks!`, 'success');
+                        }
+                    } else {
+                        showStatus('Invalid import file format', 'error');
+                    }
+                } catch (error) {
+                    showStatus('Error importing file: ' + error.message, 'error');
+                }
+                
+                // Reset file input
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Show statistics modal
+        function showStats() {
+            const stats = {
+                total: artworks.length,
+                artists: new Set(artworks.map(a => a.author)).size,
+                tags: new Set(artworks.flatMap(a => a.tags || [])).size,
+                styles: {},
+                colors: {},
+                anatomy: {},
+                recent: artworks.slice(0, 5).map(a => a.title)
+            };
+            
+            // Count styles
+            artworks.forEach(a => {
+                if (a.style) stats.styles[a.style] = (stats.styles[a.style] || 0) + 1;
+                if (a.color) stats.colors[a.color] = (stats.colors[a.color] || 0) + 1;
+                if (a.anatomy) {
+                    a.anatomy.forEach(part => {
+                        stats.anatomy[part] = (stats.anatomy[part] || 0) + 1;
+                    });
+                }
+            });
+            
+            // Build stats HTML
+            let statsHTML = `
+                <div class="stat-row"><span>Total Artworks</span><span>${stats.total}</span></div>
+                <div class="stat-row"><span>Unique Artists</span><span>${stats.artists}</span></div>
+                <div class="stat-row"><span>Unique Tags</span><span>${stats.tags}</span></div>
+            `;
+            
+            if (Object.keys(stats.styles).length > 0) {
+                statsHTML += '<h3 style="margin-top: 20px; color: #FFD700;">Styles</h3>';
+                Object.entries(stats.styles).forEach(([style, count]) => {
+                    statsHTML += `<div class="stat-row"><span>${style}</span><span>${count}</span></div>`;
+                });
+            }
+            
+            if (Object.keys(stats.colors).length > 0) {
+                statsHTML += '<h3 style="margin-top: 20px; color: #FFD700;">Colors</h3>';
+                Object.entries(stats.colors).forEach(([color, count]) => {
+                    statsHTML += `<div class="stat-row"><span>${color}</span><span>${count}</span></div>`;
+                });
+            }
+            
+            if (Object.keys(stats.anatomy).length > 0) {
+                statsHTML += '<h3 style="margin-top: 20px; color: #FFD700;">Top Anatomy</h3>';
+                Object.entries(stats.anatomy)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10)
+                    .forEach(([part, count]) => {
+                        statsHTML += `<div class="stat-row"><span>${part}</span><span>${count}</span></div>`;
+                    });
+            }
+            
+            document.getElementById('statsContent').innerHTML = statsHTML;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        // Close statistics modal
+        function closeStats() {
+            document.getElementById('statsModal').classList.remove('active');
+        }
+
+        // Add filter tag from dynamic tags
+        function addFilterTag(tag) {
+            if (!currentFilters.tags.includes(tag)) {
+                currentFilters.tags.push(tag);
+                renderFilterTags();
+                applyFilters();
             }
         }
 
@@ -1190,9 +1438,10 @@
                     
                     showStatus('Artwork uploaded successfully!', 'success');
                     
-                    // Refresh gallery
+                    // Refresh gallery and tags
                     filteredArtworks = [...artworks];
                     applyFilters();
+                    updateDynamicTags();
                 }
             };
             
@@ -1470,11 +1719,6 @@
                 // Save to localStorage
                 saveArtworks();
                 
-                // Update GitHub if configured
-                if (githubConfig.repo && githubConfig.token) {
-                    updateGitHubCatalog();
-                }
-                
                 // Update display
                 document.getElementById('modalTitle').textContent = artwork.title;
                 document.getElementById('modalAuthor').textContent = `by ${artwork.author}${artwork.style ? ' • ' + artwork.style : ''}`;
@@ -1491,10 +1735,36 @@
                 // Switch back to view mode
                 toggleEditMode();
                 
-                // Refresh gallery in case filters are applied
+                // Refresh gallery and tags
                 applyFilters();
+                updateDynamicTags();
                 
                 showStatus('Artwork updated successfully!', 'success');
+            }
+        }
+
+        function deleteArtwork() {
+            const artwork = artworks.find(a => a.id === currentArtworkId);
+            if (artwork) {
+                const confirmDelete = confirm(`Are you sure you want to delete "${artwork.title}"? This cannot be undone.`);
+                
+                if (confirmDelete) {
+                    // Remove from artworks array
+                    artworks = artworks.filter(a => a.id !== currentArtworkId);
+                    
+                    // Save to localStorage
+                    saveArtworks();
+                    
+                    // Close modal
+                    closeModal();
+                    
+                    // Refresh gallery and tags
+                    filteredArtworks = [...artworks];
+                    applyFilters();
+                    updateDynamicTags();
+                    
+                    showStatus('Artwork deleted successfully', 'success');
+                }
             }
         }
 
