@@ -1074,6 +1074,147 @@
             reader.readAsText(file);
         }
 
+        // Add artwork using URL - make sure this function is defined
+        window.addArtwork = function() {
+            const imageUrl = document.getElementById('imageUrl').value.trim();
+            const titleInput = document.getElementById('titleInput');
+            const authorInput = document.getElementById('authorNameInput');
+            const tagsInput = document.getElementById('tagsInput');
+            const styleSelect = document.getElementById('styleSelect');
+            const anatomyInput = document.getElementById('anatomyInput');
+            const colorSelect = document.getElementById('colorSelect');
+            
+            if (!imageUrl) {
+                showStatus('Please enter an image URL', 'error');
+                return;
+            }
+            
+            if (!titleInput.value.trim()) {
+                showStatus('Please enter a title', 'error');
+                return;
+            }
+            
+            // Process anatomy input
+            const anatomyParts = anatomyInput.value
+                .split(',')
+                .map(a => a.trim().toLowerCase())
+                .filter(a => a);
+            
+            const artwork = {
+                id: Date.now().toString(),
+                title: titleInput.value.trim(),
+                author: authorInput.value.trim() || 'Unknown',
+                tags: tagsInput.value.split(',').map(t => t.trim()).filter(t => t),
+                style: styleSelect.value,
+                anatomy: anatomyParts,
+                color: colorSelect.value,
+                url: imageUrl,
+                thumbnail: imageUrl,
+                dateAdded: new Date().toISOString()
+            };
+            
+            artworks.unshift(artwork);
+            
+            if (saveArtworks()) {
+                // Clear inputs
+                document.getElementById('imageUrl').value = '';
+                titleInput.value = '';
+                authorInput.value = '';
+                tagsInput.value = '';
+                styleSelect.value = '';
+                anatomyInput.value = '';
+                colorSelect.value = '';
+                
+                showStatus('Artwork added successfully!', 'success');
+                
+                // Refresh gallery and tags
+                filteredArtworks = [...artworks];
+                applyFilters();
+                updateDynamicTags();
+            }
+        }
+
+        // Download full backup
+        window.downloadFullBackup = function() {
+            const backup = {
+                version: '2.0',
+                backupDate: new Date().toISOString(),
+                artworks: artworks,
+                filters: currentFilters,
+                totalCount: artworks.length,
+                metadata: {
+                    artists: [...new Set(artworks.map(a => a.author))],
+                    tags: [...new Set(artworks.flatMap(a => a.tags || []))],
+                    styles: [...new Set(artworks.map(a => a.style).filter(s => s))],
+                    anatomy: [...new Set(artworks.flatMap(a => a.anatomy || []))],
+                    colors: [...new Set(artworks.map(a => a.color).filter(c => c))]
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `art-catalogue-complete-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus(`Full backup downloaded (${artworks.length} artworks)`, 'success');
+        }
+
+        // Restore from backup
+        window.restoreFromBackup = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    if (backup.artworks && Array.isArray(backup.artworks)) {
+                        const confirmRestore = confirm(
+                            `This backup contains ${backup.artworks.length} artworks.\n` +
+                            `Created: ${backup.backupDate ? new Date(backup.backupDate).toLocaleDateString() : 'Unknown'}\n\n` +
+                            `This will REPLACE all current data. Continue?`
+                        );
+                        
+                        if (confirmRestore) {
+                            // Replace all data
+                            artworks = backup.artworks;
+                            
+                            // Restore filters if they exist
+                            if (backup.filters) {
+                                // Restore items per page
+                                if (backup.filters.itemsPerPage) {
+                                    currentFilters.itemsPerPage = backup.filters.itemsPerPage;
+                                    document.getElementById('itemsPerPageSelect').value = backup.filters.itemsPerPage;
+                                }
+                            }
+                            
+                            saveArtworks();
+                            filteredArtworks = [...artworks];
+                            applyFilters();
+                            updateDynamicTags();
+                            
+                            showStatus(`Restored ${artworks.length} artworks from backup!`, 'success');
+                        }
+                    } else {
+                        showStatus('Invalid backup file format', 'error');
+                    }
+                } catch (error) {
+                    showStatus('Error reading backup file: ' + error.message, 'error');
+                }
+                
+                // Reset file input
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
+        }
+
         // Show statistics modal
         function showStats() {
             const stats = {
@@ -1531,6 +1672,66 @@
             };
             
             reader.readAsDataURL(file);
+        }
+
+        // Add artwork using URL
+        function addArtwork() {
+            const imageUrl = document.getElementById('imageUrl').value.trim();
+            const titleInput = document.getElementById('titleInput');
+            const authorInput = document.getElementById('authorNameInput');
+            const tagsInput = document.getElementById('tagsInput');
+            const styleSelect = document.getElementById('styleSelect');
+            const anatomyInput = document.getElementById('anatomyInput');
+            const colorSelect = document.getElementById('colorSelect');
+            
+            if (!imageUrl) {
+                showStatus('Please enter an image URL', 'error');
+                return;
+            }
+            
+            if (!titleInput.value.trim()) {
+                showStatus('Please enter a title', 'error');
+                return;
+            }
+            
+            // Process anatomy input
+            const anatomyParts = anatomyInput.value
+                .split(',')
+                .map(a => a.trim().toLowerCase())
+                .filter(a => a);
+            
+            const artwork = {
+                id: Date.now().toString(),
+                title: titleInput.value.trim(),
+                author: authorInput.value.trim() || 'Unknown',
+                tags: tagsInput.value.split(',').map(t => t.trim()).filter(t => t),
+                style: styleSelect.value,
+                anatomy: anatomyParts,
+                color: colorSelect.value,
+                url: imageUrl,
+                thumbnail: imageUrl,
+                dateAdded: new Date().toISOString()
+            };
+            
+            artworks.unshift(artwork);
+            
+            if (saveArtworks()) {
+                // Clear inputs
+                document.getElementById('imageUrl').value = '';
+                titleInput.value = '';
+                authorInput.value = '';
+                tagsInput.value = '';
+                styleSelect.value = '';
+                anatomyInput.value = '';
+                colorSelect.value = '';
+                
+                showStatus('Artwork added successfully!', 'success');
+                
+                // Refresh gallery and tags
+                filteredArtworks = [...artworks];
+                applyFilters();
+                updateDynamicTags();
+            }
         }
 
         // Upload to GitHub
