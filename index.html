@@ -785,12 +785,12 @@
                 <!-- Backup & Restore -->
                 <h3 style="margin-top: 20px;">Backup & Restore</h3>
                 <button class="btn" onclick="downloadFullBackup()">Download Full Backup</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('restoreFile').click()" style="background: #444; margin-top: 5px;">Restore from Backup</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('restoreFile').click()" style="background: #777; margin-top: 5px;">Restore from Backup</button>
                 <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreFromBackup(event)">
                 
                 <!-- Data Management -->
                 <h3 style="margin-top: 20px;">Data Management</h3>
-                <button class="btn btn-secondary" onclick="showStats()" style="background: #444;">View Statistics</button>
+                <button class="btn btn-secondary" onclick="showStats()" style="background: #777;">View Statistics</button>
                 
                 <button class="btn btn-danger" onclick="clearAll()">Clear All Data</button>
             </div>
@@ -929,6 +929,87 @@
             } else {
                 dynamicTagsContainer.innerHTML = '<span style="color: #666; font-size: 12px;">No tags yet</span>';
             }
+        }
+
+        // Download full backup
+        function downloadFullBackup() {
+            const backup = {
+                version: '2.0',
+                backupDate: new Date().toISOString(),
+                artworks: artworks,
+                filters: currentFilters,
+                totalCount: artworks.length,
+                metadata: {
+                    artists: [...new Set(artworks.map(a => a.author))],
+                    tags: [...new Set(artworks.flatMap(a => a.tags || []))],
+                    styles: [...new Set(artworks.map(a => a.style).filter(s => s))],
+                    anatomy: [...new Set(artworks.flatMap(a => a.anatomy || []))],
+                    colors: [...new Set(artworks.map(a => a.color).filter(c => c))]
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `art-catalogue-complete-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus(`Full backup downloaded (${artworks.length} artworks)`, 'success');
+        }
+
+        // Restore from backup
+        function restoreFromBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    if (backup.artworks && Array.isArray(backup.artworks)) {
+                        const confirmRestore = confirm(
+                            `This backup contains ${backup.artworks.length} artworks.\n` +
+                            `Created: ${backup.backupDate ? new Date(backup.backupDate).toLocaleDateString() : 'Unknown'}\n\n` +
+                            `This will REPLACE all current data. Continue?`
+                        );
+                        
+                        if (confirmRestore) {
+                            // Replace all data
+                            artworks = backup.artworks;
+                            
+                            // Restore filters if they exist
+                            if (backup.filters) {
+                                // Restore items per page
+                                if (backup.filters.itemsPerPage) {
+                                    currentFilters.itemsPerPage = backup.filters.itemsPerPage;
+                                    document.getElementById('itemsPerPageSelect').value = backup.filters.itemsPerPage;
+                                }
+                            }
+                            
+                            saveArtworks();
+                            filteredArtworks = [...artworks];
+                            applyFilters();
+                            updateDynamicTags();
+                            
+                            showStatus(`Restored ${artworks.length} artworks from backup!`, 'success');
+                        }
+                    } else {
+                        showStatus('Invalid backup file format', 'error');
+                    }
+                } catch (error) {
+                    showStatus('Error reading backup file: ' + error.message, 'error');
+                }
+                
+                // Reset file input
+                event.target.value = '';
+            };
+            
+            reader.readAsText(file);
         }
 
         // Export data as JSON
